@@ -7,11 +7,10 @@ function FindDoctorSearch() {
 
   const handleSearch = () => {
     if (!specialty) {
-      alert("Please select a specialty");
+      alert("Select specialty");
       return;
     }
 
-    // ✅ navigation (important for marks)
     navigate(`/search?specialty=${specialty}`);
   };
 
