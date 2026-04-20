@@ -4,31 +4,47 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
     try {
-      const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
+      const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password })
       });
 
-      const data = await res.json();
+      const data = await response.json();
 
-      localStorage.setItem("user", JSON.stringify(data));
-      alert("Login Successful");
-    } catch (err) {
-      console.log(err);
+      if (response.ok) {
+        alert("Login successful");
+        localStorage.setItem("token", data.token);
+      } else {
+        alert("Login failed");
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
   return (
     <div>
       <h2>Login</h2>
-      <input placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-      <input placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
-      <button onClick={handleLogin}>Login</button>
+      <form onSubmit={handleLogin}>
+        <input
+          type="email"
+          placeholder="Email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button type="submit">Login</button>
+      </form>
     </div>
   );
 }
