@@ -1,44 +1,56 @@
-import React from "react";
+import React, { useState } from "react";
 
 function Login() {
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleLogin = async () => {
+    try {
+      const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      const data = await response.json();
+
+      console.log("Login response:", data);
+      alert("Login Successful!");
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Login Failed");
+    }
+  };
+
   return (
-    <div style={container}>
+    <div>
       <h2>Login</h2>
 
-      <input placeholder="Email" style={input} />
-      <input placeholder="Password" type="password" style={input} />
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        onChange={handleChange}
+      />
 
-      <button style={button}>Login</button>
+      <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        onChange={handleChange}
+      />
+
+      <button onClick={handleLogin}>Login</button>
     </div>
   );
 }
-
-const container = {
-  width: "300px",
-  margin: "50px auto",
-  padding: "25px",
-  background: "#fff",
-  borderRadius: "10px",
-  boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-  textAlign: "center"
-};
-
-const input = {
-  width: "100%",
-  padding: "10px",
-  margin: "10px 0",
-  borderRadius: "5px",
-  border: "1px solid #ccc"
-};
-
-const button = {
-  padding: "10px",
-  width: "100%",
-  backgroundColor: "#2196F3",
-  color: "white",
-  border: "none",
-  borderRadius: "5px",
-  cursor: "pointer"
-};
 
 export default Login;
